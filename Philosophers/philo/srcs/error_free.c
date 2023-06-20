@@ -6,7 +6,7 @@
 /*   By: seocha <seocha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:28:56 by seocha            #+#    #+#             */
-/*   Updated: 2023/06/20 17:44:47 by seocha           ###   ########.fr       */
+/*   Updated: 2023/06/20 22:01:09 by seocha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	check_finished_2(t_info *info, t_philo *philo, int i, long long now)
 			break ;
 		}
 		pthread_mutex_unlock(&(info->eat_m));
-			i++;
+		i++;
 	}
 }
 
