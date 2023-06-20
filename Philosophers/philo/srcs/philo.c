@@ -6,7 +6,7 @@
 /*   By: seocha <seocha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:30:42 by seocha            #+#    #+#             */
-/*   Updated: 2023/06/20 17:41:03 by seocha           ###   ########.fr       */
+/*   Updated: 2023/06/20 20:18:18 by seocha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	main(int argc, char *argv[])
 	if (argc != 5 && argc != 6)
 	{
 		printf("%s\n", "Argument error.");
-		return (-1);
+		return (1);
 	}
 	if (init_info(&info, argc, argv) == -1)
 		return (1);
