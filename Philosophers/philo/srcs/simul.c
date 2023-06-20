@@ -6,7 +6,7 @@
 /*   By: seocha <seocha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:24:40 by seocha            #+#    #+#             */
-/*   Updated: 2023/04/08 22:22:42 by seocha           ###   ########.fr       */
+/*   Updated: 2023/06/20 17:45:01 by seocha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,6 @@ static void	take_time(long long time)
 			break ;
 		usleep(1000);
 	}
-}
-
-void	philo_log(t_info *info, t_philo *philo, char *str)
-{
-	long long	now;
-
-	now = get_time();
-	pthread_mutex_lock(&(info->status));
-	pthread_mutex_lock(&(info->flag_m));
-	if (!(info->flag))
-		printf("%lld %d %s\n", now - info->t_start, philo->id + 1, str);
-	pthread_mutex_unlock(&(info->flag_m));
-	pthread_mutex_unlock(&(info->status));
 }
 
 static void	eat(t_info *info, t_philo *philo)
@@ -63,6 +50,14 @@ static void	eat(t_info *info, t_philo *philo)
 	pthread_mutex_unlock(&(info->forks[philo->l_fork]));
 }
 
+static void	sleep_think(t_info *info, t_philo *philo)
+{
+	philo_log(info, philo, "is sleeping");
+	take_time(info->t_sleep);
+	philo_log(info, philo, "is thinking");
+	usleep(1000);
+}
+
 static void	*simulation(void *arg)
 {
 	t_info	*info;
@@ -79,20 +74,19 @@ static void	*simulation(void *arg)
 		eat(info, philo);
 		if (philo->eat_cnt == info->must_cnt)
 		{
+			pthread_mutex_lock(&(info->cnt_m));
 			info->all_eat++;
+			pthread_mutex_unlock(&(info->cnt_m));
 			break ;
 		}
-		philo_log(info, philo, "is sleeping");
-		take_time(info->t_sleep);
-		philo_log(info, philo, "is thinking");
-		usleep(1000);
+		sleep_think(info, philo);
 		pthread_mutex_lock(&(info->flag_m));
 	}
 	pthread_mutex_unlock(&(info->flag_m));
 	return (0);
 }
 
-void	thread(t_info *info, t_philo *philo)
+int	thread(t_info *info, t_philo *philo)
 {
 	int	i;
 
@@ -101,7 +95,7 @@ void	thread(t_info *info, t_philo *philo)
 	{
 		philo[i].t_last = get_time();
 		if (pthread_create(&(philo[i].th), NULL, simulation, &(philo[i])))
-			exit_error("Fail to create thread");
+			return (exit_error("Fail to create thread"));
 		i++;
 	}
 	check_finished(info, philo);
@@ -109,4 +103,5 @@ void	thread(t_info *info, t_philo *philo)
 	while (i < info->num)
 		pthread_join(philo[i++].th, NULL);
 	free_thread(info, philo);
+	return (0);
 }

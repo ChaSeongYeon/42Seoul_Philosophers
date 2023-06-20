@@ -6,7 +6,7 @@
 /*   By: seocha <seocha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:31:43 by seocha            #+#    #+#             */
-/*   Updated: 2023/04/07 16:32:17 by seocha           ###   ########.fr       */
+/*   Updated: 2023/06/20 16:59:38 by seocha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ long long	get_time(void)
 {
 	struct timeval	time;
 
-	if (gettimeofday(&time, NULL) == -1)
-		exit_error("Failed to get time.");
+	gettimeofday(&time, NULL);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
@@ -56,7 +55,7 @@ int	ft_atoi(const char *str)
 	if (*str == '-' || *str == '+')
 	{
 		if (*str == '-')
-			exit_error("The argument must be a positive number.");
+			return (exit_error("The argument must be a positive number."));
 		str++;
 	}
 	while (ft_isdigit(*str))
@@ -65,6 +64,6 @@ int	ft_atoi(const char *str)
 		str++;
 	}
 	if (*str != '\0' || result > 2147483647)
-		exit_error("The argument is not numeric or out of range.");
+		return (exit_error("The argument is not numeric or out of range."));
 	return ((int)result);
 }
